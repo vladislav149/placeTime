@@ -14,7 +14,6 @@
   padding: 12px 30px;
   font-size: 16px;
   font-weight: bold;
-  text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
