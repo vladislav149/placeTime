@@ -1,14 +1,16 @@
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, useTemplateRef } from 'vue'
 import TheCard from '@/components/TheCard.vue'
 import TheButton from '@/components/TheButton.vue'
 
+const mainRef = useTemplateRef('main')
 const activeId = ref(null)
 const store = useStore()
 const characters = computed(() => store.getters['cards/characters'])
 const isLoading = computed(() => store.getters['cards/isLoading'])
 const hasError = computed(() => store.getters['cards/hasError'])
+const isNotReady = computed(() => isLoading.value || hasError.value)
 
 onMounted(() => {
   store.dispatch('cards/getCharacter')
@@ -29,15 +31,24 @@ function onAdd() {
 
 function onSort(type) {
   store.commit('cards/sortByType', type)
+  mainRef.value.scrollIntoView({ behavior: 'smooth' })
 }
 </script>
 
 <template>
-  <main class="main">
+  <main
+    class="main"
+    ref="main"
+  >
     <div class="main__inner container">
       <div v-if="hasError">error</div>
-      <div v-if="isLoading">loader</div>
-      <TransitionGroup v-else tag="ul" name="list" class="main__cards">
+      <div v-else-if="isLoading">loader</div>
+      <TransitionGroup
+        v-else
+        tag="ul"
+        name="list"
+        class="main__cards"
+      >
         <TheCard
           v-for="character in characters"
           :character
@@ -49,19 +60,44 @@ function onSort(type) {
       </TransitionGroup>
       <ul class="main__button-list">
         <li>
-          <TheButton @click="onAdd">Добавить рандомный элемент</TheButton>
+          <TheButton
+            :disabled="isNotReady"
+            @click="onAdd"
+          >
+            Добавить рандомный элемент
+          </TheButton>
         </li>
         <li>
-          <TheButton @click="onSort('name')">Сортировка по имени</TheButton>
+          <TheButton
+            :disabled="isNotReady"
+            @click="onSort('name')"
+          >
+            Сортировка по имени
+          </TheButton>
         </li>
         <li>
-          <TheButton @click="onSort('gender')">Сортировка по полу</TheButton>
+          <TheButton
+            :disabled="isNotReady"
+            @click="onSort('gender')"
+          >
+            Сортировка по полу
+          </TheButton>
         </li>
         <li>
-          <TheButton @click="onSort('status')">Сортировка по статусу</TheButton>
+          <TheButton
+            :disabled="isNotReady"
+            @click="onSort('status')"
+          >
+            Сортировка по статусу
+          </TheButton>
         </li>
         <li>
-          <TheButton @click="onSort('type')">Сортировка по типу</TheButton>
+          <TheButton
+            :disabled="isNotReady"
+            @click="onSort('type')"
+          >
+            Сортировка по типу
+          </TheButton>
         </li>
       </ul>
     </div>
@@ -79,6 +115,7 @@ function onSort(type) {
   perspective: 1000px;
 }
 
+.list-move,
 .list-enter-active,
 .list-leave-active {
   transition:
@@ -89,6 +126,10 @@ function onSort(type) {
 .list-leave-to {
   opacity: 0;
   transform: translateY(-30px);
+}
+
+.list-leave-active {
+  position: absolute;
 }
 
 .main__button-list {

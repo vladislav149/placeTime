@@ -26,11 +26,27 @@ function onRotate() {
 </script>
 
 <template>
-  <li class="character" @click="onRotate">
-    <div class="character__inner character__front" :class="{ 'rotate-back': isBack }">
-      <button class="character__remove" type="button" @click.stop="onRemove">x</button>
+  <li
+    class="character"
+    @click="onRotate"
+  >
+    <div
+      class="character__inner character__front"
+      :class="{ 'rotate-back': isBack }"
+    >
+      <button
+        class="character__remove"
+        type="button"
+        @click.stop="onRemove"
+      >
+        x
+      </button>
       <h3 class="character__title">{{ character.name }}</h3>
-      <img class="character__img" :src="character.image" :alt="character.name" />
+      <img
+        class="character__img"
+        :src="character.image"
+        :alt="character.name"
+      />
       <ul class="character__list">
         <li class="character__item">
           <span>gender: </span>
@@ -50,7 +66,10 @@ function onRotate() {
         </li>
       </ul>
     </div>
-    <div class="character__inner character__back" :class="{ 'rotate-front': isBack }">
+    <div
+      class="character__inner character__back"
+      :class="{ 'rotate-front': isBack }"
+    >
       <div>
         <span> location: </span>
         <span>{{ character.location.name }}</span>

@@ -10,6 +10,7 @@ const state = {
 const getters = {
   characters: ({ characters }) => characters,
   isLoading: ({ isLoading }) => isLoading,
+  hasError: ({ hasError }) => hasError,
 }
 
 const mutations = {
@@ -22,7 +23,9 @@ const mutations = {
   },
   addRandomCharacter(state) {
     const id = getRandomInteger(0, state.characters.length - 1)
-    state.characters.push(state.characters[id])
+    const newCharacter = JSON.parse(JSON.stringify(state.characters[id]))
+    newCharacter.id = Date.now()
+    state.characters.push(newCharacter)
   },
   sortByType(state, type) {
     state.characters.sort((a, b) => a[type].localeCompare(b[type]))
