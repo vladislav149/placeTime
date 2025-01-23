@@ -1,10 +1,9 @@
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, computed, ref, useTemplateRef } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import TheCard from '@/components/TheCard.vue'
 import TheButton from '@/components/TheButton.vue'
 
-const mainRef = useTemplateRef('main')
 const activeId = ref(null)
 const store = useStore()
 const characters = computed(() => store.getters['cards/characters'])
@@ -31,15 +30,11 @@ function onAdd() {
 
 function onSort(type) {
   store.commit('cards/sortByType', type)
-  mainRef.value.scrollIntoView({ behavior: 'smooth' })
 }
 </script>
 
 <template>
-  <main
-    class="main"
-    ref="main"
-  >
+  <main class="main">
     <div class="main__inner container">
       <div v-if="hasError">error</div>
       <div v-else-if="isLoading">loader</div>
